@@ -17,7 +17,7 @@ files = %w[
 
 Gem::Specification.new do |spec|
   spec.name = 'rake_vault'
-  spec.version = RakeGCP::VERSION
+  spec.version = RakeVault::VERSION
   spec.authors = ['InfraBlocks Maintainers']
   spec.email = ['maintainers@infrablocks.io']
 
