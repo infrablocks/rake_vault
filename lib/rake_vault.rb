@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'rake_vault/tasks'
 require 'rake_vault/task_sets'
 require 'rake_vault/version'
 
