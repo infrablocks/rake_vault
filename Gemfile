@@ -2,5 +2,5 @@
 
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in rake_docker.gemspec
+# Specify your gem's dependencies in rake_vault.gemspec
 gemspec
