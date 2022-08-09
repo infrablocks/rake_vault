@@ -54,6 +54,21 @@ describe RakeVault::Tasks::OidcAuth do
             .with(hash_including(role: role)))
   end
 
+  it 'passes the provided value for the address parameter to login "\
+  "when present' do
+    address = 'https://vault.example.com'
+    define_task do |t|
+      t.address = address
+    end
+    stub_ruby_vault
+
+    Rake::Task['oidc:login'].invoke
+
+    expect(RubyVault)
+      .to(have_received(:login)
+            .with(hash_including(address: address)))
+  end
+
   def stub_ruby_vault
     allow(RubyVault).to(receive(:login))
   end

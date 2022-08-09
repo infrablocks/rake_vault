@@ -7,11 +7,13 @@ module RakeVault
     class OidcAuth < RakeFactory::Task
       default_name :login
       parameter :role
+      parameter :address
 
       action do |task|
         RubyVault.login(
           method: 'oidc',
-          role: task.role
+          role: task.role,
+          address: task.address
         )
       end
     end
