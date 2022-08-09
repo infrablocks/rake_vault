@@ -10,9 +10,11 @@ module RakeVault
       parameter :address
 
       action do |task|
+        auth = task.role ? ["role=#{task.role}"] : []
+
         RubyVault.login(
           method: 'oidc',
-          role: task.role,
+          auth: auth,
           address: task.address
         )
       end

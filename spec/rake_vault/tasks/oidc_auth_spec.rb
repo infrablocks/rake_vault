@@ -40,10 +40,20 @@ describe RakeVault::Tasks::OidcAuth do
             .with(hash_including(method: 'oidc')))
   end
 
-  it 'passes the provided value for the role parameter to login when present' do
-    role = 'some-role'
+  it 'does not pass role to login within auth parameter when role not passed' do
+    define_task
+    stub_ruby_vault
+
+    Rake::Task['oidc:login'].invoke
+
+    expect(RubyVault)
+      .to(have_received(:login)
+            .with(hash_including(auth: excluding(a_string_including('role=')))))
+  end
+
+  it 'does not pass role to login within auth parameter when role is nil' do
     define_task do |t|
-      t.role = role
+      t.role = nil
     end
     stub_ruby_vault
 
@@ -51,7 +61,20 @@ describe RakeVault::Tasks::OidcAuth do
 
     expect(RubyVault)
       .to(have_received(:login)
-            .with(hash_including(role: role)))
+            .with(hash_including(auth: excluding(a_string_including('role=')))))
+  end
+
+  it 'passes the provided role to login within auth parameter when present' do
+    define_task do |t|
+      t.role = 'some-role'
+    end
+    stub_ruby_vault
+
+    Rake::Task['oidc:login'].invoke
+
+    expect(RubyVault)
+      .to(have_received(:login)
+            .with(hash_including(auth: including('role=some-role'))))
   end
 
   it 'passes the provided value for the address parameter to login "\

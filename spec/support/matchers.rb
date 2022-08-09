@@ -32,3 +32,7 @@ RSpec::Matchers.define :have_tasks_defined do |expected|
     composite_matcher.description
   end
 end
+
+RSpec::Matchers.define_negated_matcher(
+  :excluding, :including
+)
