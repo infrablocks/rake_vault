@@ -7,6 +7,24 @@ RSpec.describe RakeVault do
     expect(RakeVault::VERSION).not_to be_nil
   end
 
+  describe '.define_oidc_auth_task' do
+    context 'when instantiating RakeVault::Task::OidcAuth' do
+      it 'passes the provided options and block' do
+        opts = {}
+        block = ->(_t) do end
+        allow(RakeVault::Tasks::OidcAuth).to(receive(:define))
+
+        described_class.define_oidc_auth_task(opts, &block)
+
+        expect(RakeVault::Tasks::OidcAuth)
+          .to(have_received(:define) do |passed_opts, &passed_block|
+            expect(passed_opts).to(eq(opts))
+            expect(passed_block).to(eq(block))
+          end)
+      end
+    end
+  end
+
   describe '.define_installation_tasks' do
     context 'when setting up tasks for vault installation' do
       it 'sets the namespace to vault by default' do

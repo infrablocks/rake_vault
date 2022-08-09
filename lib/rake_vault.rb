@@ -8,4 +8,8 @@ module RakeVault
   def self.define_installation_tasks(opts = {})
     RakeVault::TaskSets::Vault.define(opts).delegate
   end
+
+  def self.define_oidc_auth_task(opts = {}, &block)
+    RakeVault::Tasks::OidcAuth.define(opts, &block)
+  end
 end

@@ -22,23 +22,18 @@ describe RakeVault::Tasks::OidcAuth do
   end
 
   it 'allows multiple login tasks to be declared' do
-    namespace :oidc1 do
-      described_class.define
-    end
-
-    namespace :oidc2 do
-      described_class.define
-    end
+    define_task(namespace: :oidc1)
+    define_task(namespace: :oidc2)
 
     expect(Rake.application).to(have_task_defined('oidc1:login'))
     expect(Rake.application).to(have_task_defined('oidc2:login'))
   end
 
   it 'passes method oidc to login' do
-    described_class.define
+    define_task
     stub_ruby_vault
 
-    Rake::Task['login'].invoke
+    Rake::Task['oidc:login'].invoke
 
     expect(RubyVault)
       .to(have_received(:login)
@@ -47,12 +42,12 @@ describe RakeVault::Tasks::OidcAuth do
 
   it 'passes the provided value for the role parameter to login when present' do
     role = 'some-role'
-    described_class.define do |t|
+    define_task do |t|
       t.role = role
     end
     stub_ruby_vault
 
-    Rake::Task['login'].invoke
+    Rake::Task['oidc:login'].invoke
 
     expect(RubyVault)
       .to(have_received(:login)
