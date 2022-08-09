@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rake_factory'
+require 'ruby_vault'
 
 module RakeVault
   module Tasks
