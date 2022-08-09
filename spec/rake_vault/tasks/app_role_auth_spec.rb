@@ -6,7 +6,7 @@ describe RakeVault::Tasks::AppRoleAuth do
   include_context 'rake'
 
   def define_task(opts = {}, &block)
-    opts = { namespace: :vault }.merge(opts)
+    opts = { namespace: :app_role }.merge(opts)
 
     namespace opts[:namespace] do
       subject.define(opts, &block)
@@ -17,6 +17,6 @@ describe RakeVault::Tasks::AppRoleAuth do
     define_task
 
     expect(Rake.application)
-      .to(have_task_defined('vault:app_role_auth'))
+      .to(have_task_defined('app_role:login'))
   end
 end

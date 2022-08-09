@@ -2,11 +2,11 @@
 
 require 'spec_helper'
 
-describe RakeVault::Tasks::Login do
+describe RakeVault::Tasks::OidcAuth do
   include_context 'rake'
 
   def define_task(opts = {}, &block)
-    opts = { namespace: :vault }.merge(opts)
+    opts = { namespace: :oidc }.merge(opts)
 
     namespace opts[:namespace] do
       subject.define(opts, &block)
@@ -17,6 +17,6 @@ describe RakeVault::Tasks::Login do
     define_task
 
     expect(Rake.application)
-      .to(have_task_defined('vault:login'))
+      .to(have_task_defined('oidc:login'))
   end
 end
