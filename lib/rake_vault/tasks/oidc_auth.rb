@@ -16,6 +16,7 @@ module RakeVault
       parameter :role
       parameter :address
       parameter :ensure_task_name, default: :'vault:ensure'
+      parameter :no_print, default: false
 
       action do |task|
         auth = task.role ? ["role=#{task.role}"] : []
@@ -23,7 +24,8 @@ module RakeVault
         RubyVault.login(
           method: 'oidc',
           auth: auth,
-          address: task.address
+          address: task.address,
+          no_print: task.no_print
         )
       end
     end

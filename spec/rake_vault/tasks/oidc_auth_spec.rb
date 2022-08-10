@@ -112,6 +112,31 @@ describe RakeVault::Tasks::OidcAuth do
             .with(hash_including(address: address)))
   end
 
+  it 'passes a no_print parameter of false to login by default' do
+    define_task
+    stub_ruby_vault
+
+    Rake::Task['oidc:login'].invoke
+
+    expect(RubyVault)
+      .to(have_received(:login)
+            .with(hash_including(no_print: false)))
+  end
+
+  it 'passes the provided value for the no_print parameter to login ' \
+     'when present' do
+    define_task do |t|
+      t.no_print = true
+    end
+    stub_ruby_vault
+
+    Rake::Task['oidc:login'].invoke
+
+    expect(RubyVault)
+      .to(have_received(:login)
+            .with(hash_including(no_print: true)))
+  end
+
   def stub_ruby_vault
     allow(RubyVault).to(receive(:login))
   end
