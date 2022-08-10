@@ -27,6 +27,13 @@ describe RakeVault::Tasks::OidcAuth do
       .to(have_task_defined('oidc:login'))
   end
 
+  it 'gives the task a description' do
+    define_task
+
+    expect(Rake::Task['oidc:login'].full_comment)
+      .to(eq('Login with oidc using vault'))
+  end
+
   it 'allows multiple login tasks to be declared' do
     define_task(namespace: :oidc1)
     define_task(namespace: :oidc2)

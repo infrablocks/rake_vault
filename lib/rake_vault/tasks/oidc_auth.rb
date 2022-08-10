@@ -10,6 +10,9 @@ module RakeVault
       default_prerequisites(RakeFactory::DynamicValue.new do |t|
         [t.ensure_task_name]
       end)
+      default_description(RakeFactory::DynamicValue.new do |_t|
+        'Login with oidc using vault'
+      end)
       parameter :role
       parameter :address
       parameter :ensure_task_name, default: :'vault:ensure'
