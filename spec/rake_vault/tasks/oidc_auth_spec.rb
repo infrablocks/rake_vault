@@ -6,6 +6,12 @@ require 'spec_helper'
 describe RakeVault::Tasks::OidcAuth do
   include_context 'rake'
 
+  before do
+    namespace :vault do
+      task :ensure
+    end
+  end
+
   def define_task(opts = {}, &block)
     opts = { namespace: :oidc }.merge(opts)
 
@@ -27,6 +33,13 @@ describe RakeVault::Tasks::OidcAuth do
 
     expect(Rake.application).to(have_task_defined('oidc1:login'))
     expect(Rake.application).to(have_task_defined('oidc2:login'))
+  end
+
+  it 'depends on the vault:ensure task by default' do
+    define_task
+
+    expect(Rake::Task['oidc:login'].prerequisite_tasks)
+      .to(include(Rake::Task['vault:ensure']))
   end
 
   it 'passes method oidc to login' do
