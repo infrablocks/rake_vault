@@ -110,7 +110,7 @@ GEM
     ruby2_keywords (0.0.5)
     ruby_gpg2 (0.8.0)
       lino (>= 1.5)
-    ruby_vault (0.1.0.pre.15)
+    ruby_vault (0.1.0.pre.16)
       immutable-struct (~> 2.4)
       lino (~> 3.0)
     rubyzip (2.3.2)
