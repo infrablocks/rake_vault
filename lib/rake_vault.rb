@@ -7,7 +7,11 @@ require 'rake_vault/token_file'
 
 module RakeVault
   def self.define_installation_tasks(opts = {})
-    RakeVault::TaskSets::Vault.define(opts).delegate
+    command_task_set = define_command_installation_tasks(opts)
+
+    configure_ruby_vault(command_task_set.binary)
+
+    command_task_set.delegate
   end
 
   def self.define_oidc_auth_task(opts = {}, &block)
@@ -16,5 +20,17 @@ module RakeVault
 
   def self.define_app_role_auth_task(opts = {}, &block)
     RakeVault::Tasks::AppRoleAuth.define(opts, &block)
+  end
+
+  class << self
+    private
+
+    def define_command_installation_tasks(opts = {})
+      RakeVault::TaskSets::Vault.define(opts)
+    end
+
+    def configure_ruby_vault(binary)
+      RubyVault.configure { |c| c.binary = binary }
+    end
   end
 end

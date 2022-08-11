@@ -35,7 +35,9 @@ module RakeVault
           data: [role_id, secret_id].compact,
           format: 'json'
         )
-        RubyVault.reset!
+        RubyVault.configure do |config|
+          config.stdout = $stdout
+        end
         RakeVault::TokenFile.write(stdout_io.string)
       end
     end

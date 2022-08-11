@@ -156,16 +156,14 @@ describe RakeVault::Tasks::AppRoleAuth do
             .with(hash_including(format: 'json')))
   end
 
-  it 'configures RubyVault with stdout and resets after' do
+  it 'configures RubyVault stdout and changes back after' do
     define_task
     stub_ruby_vault
     stub_token_file
 
     Rake::Task['app_role:login'].invoke
 
-    expect(RubyVault).to(have_received(:configure))
-    expect(RubyVault)
-      .to(have_received(:reset!))
+    expect(RubyVault).to(have_received(:configure).twice)
   end
 
   it 'writes token to file' do
@@ -182,7 +180,6 @@ describe RakeVault::Tasks::AppRoleAuth do
   def stub_ruby_vault
     allow(RubyVault).to(receive(:write))
     allow(RubyVault).to(receive(:configure))
-    allow(RubyVault).to(receive(:reset!))
   end
 
   def stub_token_file

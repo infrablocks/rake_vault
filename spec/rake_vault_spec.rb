@@ -44,6 +44,24 @@ RSpec.describe RakeVault do
   end
 
   describe '.define_installation_tasks' do
+    context 'when configuring RubyTerraform' do
+      it 'sets the binary using a path of `pwd`/vendor/vault by default' do
+        described_class.define_installation_tasks
+
+        expect(RubyVault.configuration.binary)
+          .to(eq("#{Dir.pwd}/vendor/vault/bin/vault"))
+      end
+
+      it 'uses the supplied path when provided' do
+        described_class.define_installation_tasks(
+          path: 'tools/vault'
+        )
+
+        expect(RubyVault.configuration.binary)
+          .to(eq('tools/vault/bin/vault'))
+      end
+    end
+
     context 'when setting up tasks for vault installation' do
       it 'sets the namespace to vault by default' do
         task_set = described_class.define_installation_tasks
