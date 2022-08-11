@@ -10,7 +10,7 @@ module RakeVault
       default_prerequisites(RakeFactory::DynamicValue.new do |t|
         [t.ensure_task_name]
       end)
-      default_description(RakeFactory::DynamicValue.new do |_task|
+      default_description(RakeFactory::DynamicValue.new do |_t|
         'Login with app role using vault'
       end)
       parameter :address
@@ -23,9 +23,12 @@ module RakeVault
         role_id = task.role_id ? "role_id=#{task.role_id}" : nil
         secret_id = task.secret_id ? "secret_id=#{task.secret_id}" : nil
 
-        stdout = StringIO.new
+        stdout_io = StringIO.new
 
-        RubyVault.configure(stdout: stdout)
+        RubyVault.configure do |config|
+          config.stdout = stdout_io
+        end
+
         RubyVault.write(
           address: task.address,
           path: task.path,
@@ -33,7 +36,7 @@ module RakeVault
           format: 'json'
         )
         RubyVault.reset!
-        RakeVault::TokenFile.write(stdout.string)
+        RakeVault::TokenFile.write(stdout_io.string)
       end
     end
   end

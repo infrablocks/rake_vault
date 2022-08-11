@@ -163,9 +163,7 @@ describe RakeVault::Tasks::AppRoleAuth do
 
     Rake::Task['app_role:login'].invoke
 
-    expect(RubyVault)
-      .to(have_received(:configure)
-            .with(hash_including(stdout: anything)))
+    expect(RubyVault).to(have_received(:configure))
     expect(RubyVault)
       .to(have_received(:reset!))
   end
