@@ -13,4 +13,8 @@ module RakeVault
   def self.define_oidc_auth_task(opts = {}, &block)
     RakeVault::Tasks::OidcAuth.define(opts, &block)
   end
+
+  def self.define_app_role_auth_task(opts = {}, &block)
+    RakeVault::Tasks::AppRoleAuth.define(opts, &block)
+  end
 end

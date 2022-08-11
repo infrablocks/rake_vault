@@ -25,6 +25,24 @@ RSpec.describe RakeVault do
     end
   end
 
+  describe '.define_app_role_auth_task' do
+    context 'when instantiating RakeVault::Task::AppRoleAuth' do
+      it 'passes the provided options and block' do
+        opts = {}
+        block = ->(_t) do end
+        allow(RakeVault::Tasks::AppRoleAuth).to(receive(:define))
+
+        described_class.define_app_role_auth_task(opts, &block)
+
+        expect(RakeVault::Tasks::AppRoleAuth)
+          .to(have_received(:define) do |passed_opts, &passed_block|
+            expect(passed_opts).to(eq(opts))
+            expect(passed_block).to(eq(block))
+          end)
+      end
+    end
+  end
+
   describe '.define_installation_tasks' do
     context 'when setting up tasks for vault installation' do
       it 'sets the namespace to vault by default' do
