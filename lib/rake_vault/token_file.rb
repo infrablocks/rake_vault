@@ -9,7 +9,7 @@ module RakeVault
     end
 
     def self.write_token_to_file(token)
-      file = File.open('~/.vault-token', 'w')
+      file = File.open(File.expand_path('~/.vault-token'), 'w')
       file.write(token)
       file.close
     end
