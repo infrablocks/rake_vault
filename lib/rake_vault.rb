@@ -3,6 +3,7 @@
 require 'rake_vault/tasks'
 require 'rake_vault/task_sets'
 require 'rake_vault/version'
+require 'rake_vault/token_file'
 
 module RakeVault
   def self.define_installation_tasks(opts = {})

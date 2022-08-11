@@ -51,6 +51,7 @@ describe RakeVault::Tasks::AppRoleAuth do
   it 'passes a path parameter of auth/approle/login to write by default' do
     define_task
     stub_ruby_vault
+    stub_token_file
 
     Rake::Task['app_role:login'].invoke
 
@@ -66,6 +67,7 @@ describe RakeVault::Tasks::AppRoleAuth do
       t.path = path
     end
     stub_ruby_vault
+    stub_token_file
 
     Rake::Task['app_role:login'].invoke
 
@@ -80,6 +82,7 @@ describe RakeVault::Tasks::AppRoleAuth do
       t.role_id = nil
     end
     stub_ruby_vault
+    stub_token_file
 
     Rake::Task['app_role:login'].invoke
 
@@ -96,6 +99,7 @@ describe RakeVault::Tasks::AppRoleAuth do
       t.role_id = 'some-role-id'
     end
     stub_ruby_vault
+    stub_token_file
 
     Rake::Task['app_role:login'].invoke
 
@@ -112,6 +116,7 @@ describe RakeVault::Tasks::AppRoleAuth do
       t.secret_id = nil
     end
     stub_ruby_vault
+    stub_token_file
 
     Rake::Task['app_role:login'].invoke
 
@@ -128,6 +133,7 @@ describe RakeVault::Tasks::AppRoleAuth do
       t.secret_id = 'some-secret-id'
     end
     stub_ruby_vault
+    stub_token_file
 
     Rake::Task['app_role:login'].invoke
 
@@ -138,8 +144,50 @@ describe RakeVault::Tasks::AppRoleAuth do
                   )))
   end
 
+  it 'passes format json to write by default' do
+    define_task
+    stub_ruby_vault
+    stub_token_file
+
+    Rake::Task['app_role:login'].invoke
+
+    expect(RubyVault)
+      .to(have_received(:write)
+            .with(hash_including(format: 'json')))
+  end
+
+  it 'configures RubyVault with stdout and resets after' do
+    define_task
+    stub_ruby_vault
+    stub_token_file
+
+    Rake::Task['app_role:login'].invoke
+
+    expect(RubyVault)
+      .to(have_received(:configure)
+            .with(hash_including(stdout: anything)))
+    expect(RubyVault)
+      .to(have_received(:reset!))
+  end
+
+  it 'writes token to file' do
+    define_task
+    stub_ruby_vault
+    stub_token_file
+
+    Rake::Task['app_role:login'].invoke
+
+    expect(RakeVault::TokenFile)
+      .to(have_received(:write).with(anything))
+  end
+
   def stub_ruby_vault
     allow(RubyVault).to(receive(:write))
     allow(RubyVault).to(receive(:configure))
+    allow(RubyVault).to(receive(:reset!))
+  end
+
+  def stub_token_file
+    allow(RakeVault::TokenFile).to(receive(:write))
   end
 end
