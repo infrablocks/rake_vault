@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rake_factory'
-require 'ruby_vault'
+require_relative '../auth/oidc'
 
 module RakeVault
   module Tasks
@@ -19,14 +19,7 @@ module RakeVault
       parameter :no_print, default: false
 
       action do |task|
-        auth = task.role ? ["role=#{task.role}"] : []
-
-        RubyVault.login(
-          method: 'oidc',
-          auth: auth,
-          address: task.address,
-          no_print: task.no_print
-        )
+        RakeVault::Auth::Oidc.login(task.address, task.role, task.no_print)
       end
     end
   end

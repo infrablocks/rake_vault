@@ -43,6 +43,24 @@ RSpec.describe RakeVault do
     end
   end
 
+  describe '.define_login_task' do
+    context 'when instantiating RakeVault::Task::Login' do
+      it 'passes the provided options and block' do
+        opts = {}
+        block = ->(_t) do end
+        allow(RakeVault::Tasks::Login).to(receive(:define))
+
+        described_class.define_login_task(opts, &block)
+
+        expect(RakeVault::Tasks::Login)
+          .to(have_received(:define) do |passed_opts, &passed_block|
+            expect(passed_opts).to(eq(opts))
+            expect(passed_block).to(eq(block))
+          end)
+      end
+    end
+  end
+
   describe '.define_installation_tasks' do
     context 'when configuring RubyTerraform' do
       it 'sets the binary using a path of `pwd`/vendor/vault by default' do

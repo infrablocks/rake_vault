@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rake_factory'
+require_relative '../auth/approle'
 require_relative '../token_file'
 
 module RakeVault
@@ -20,25 +21,12 @@ module RakeVault
       parameter :secret_id
 
       action do |task|
-        role_id = task.role_id ? "role_id=#{task.role_id}" : nil
-        secret_id = task.secret_id ? "secret_id=#{task.secret_id}" : nil
-
-        stdout_io = StringIO.new
-
-        RubyVault.configure do |config|
-          config.stdout = stdout_io
-        end
-
-        RubyVault.write(
-          address: task.address,
-          path: task.path,
-          data: [role_id, secret_id].compact,
-          format: 'json'
+        RakeVault::Auth::Approle.login(
+          task.address,
+          task.path,
+          task.role_id,
+          task.secret_id
         )
-        RubyVault.configure do |config|
-          config.stdout = $stdout
-        end
-        RakeVault::TokenFile.write(stdout_io.string)
       end
     end
   end

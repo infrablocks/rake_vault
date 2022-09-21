@@ -22,6 +22,10 @@ module RakeVault
     RakeVault::Tasks::AppRoleAuth.define(opts, &block)
   end
 
+  def self.define_login_task(opts = {}, &block)
+    RakeVault::Tasks::Login.define(opts, &block)
+  end
+
   class << self
     private
 
