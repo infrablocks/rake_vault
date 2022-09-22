@@ -48,10 +48,21 @@ describe RakeVault::Tasks::Login do
       .to(include(Rake::Task['vault:ensure']))
   end
 
-  it 'logs in with oidc by default' do
+  it 'logs in with oidc by default when not logged in' do
     define_task
     stub_logins
-    stub_token_lookup_failure
+    stub_token_lookup_client_error
+
+    Rake::Task['auth:login'].invoke
+
+    expect(RakeVault::Auth::Oidc)
+      .to(have_received(:login).with(anything, anything, anything))
+  end
+
+  it 'logs in with oidc by default when not logged in with server error' do
+    define_task
+    stub_logins
+    stub_token_lookup_server_error
 
     Rake::Task['auth:login'].invoke
 
@@ -63,7 +74,7 @@ describe RakeVault::Tasks::Login do
     address = 'https://some-vault.com'
     define_task({ address: address })
     stub_logins
-    stub_token_lookup_failure
+    stub_token_lookup_client_error
 
     Rake::Task['auth:login'].invoke
 
@@ -75,7 +86,7 @@ describe RakeVault::Tasks::Login do
     role = 'some-role'
     define_task({ role: role })
     stub_logins
-    stub_token_lookup_failure
+    stub_token_lookup_client_error
 
     Rake::Task['auth:login'].invoke
 
@@ -86,7 +97,7 @@ describe RakeVault::Tasks::Login do
   it 'sets no_print to true when logging in with oidc' do
     define_task
     stub_logins
-    stub_token_lookup_failure
+    stub_token_lookup_client_error
 
     Rake::Task['auth:login'].invoke
 
@@ -101,7 +112,7 @@ describe RakeVault::Tasks::Login do
     ENV['VAULT_APPROLE_SECRET_ID'] = approle_secret_id
     define_task
     stub_logins
-    stub_token_lookup_failure
+    stub_token_lookup_client_error
 
     Rake::Task['auth:login'].invoke
 
@@ -116,7 +127,7 @@ describe RakeVault::Tasks::Login do
     ENV['VAULT_APPROLE_SECRET_ID'] = 'some-secret'
     define_task({ address: address })
     stub_logins
-    stub_token_lookup_failure
+    stub_token_lookup_client_error
 
     Rake::Task['auth:login'].invoke
 
@@ -129,7 +140,7 @@ describe RakeVault::Tasks::Login do
     ENV['VAULT_APPROLE_SECRET_ID'] = 'some-secret'
     define_task
     stub_logins
-    stub_token_lookup_failure
+    stub_token_lookup_client_error
 
     Rake::Task['auth:login'].invoke
 
@@ -156,14 +167,20 @@ describe RakeVault::Tasks::Login do
     allow(RakeVault::Auth::Approle).to(receive(:login))
   end
 
-  def stub_token_lookup_failure
+  def stub_token_lookup_client_error
+    stub_token_lookup_error(Vault::HTTPClientError.new('', FakeResponse.new))
+  end
+
+  def stub_token_lookup_server_error
+    stub_token_lookup_error(Vault::HTTPServerError.new('', FakeResponse.new))
+  end
+
+  def stub_token_lookup_error(error)
     client = instance_double(Vault::Client, 'vault client')
     auth_token = instance_double(Vault::AuthToken, 'vault auth token')
     allow(Vault::Client).to(receive(:new)).and_return(client)
     allow(client).to(receive(:auth_token)).and_return(auth_token)
-    allow(auth_token).to(receive(:lookup_self)).and_raise(
-      Vault::HTTPClientError.new('', FakeResponse.new)
-    )
+    allow(auth_token).to(receive(:lookup_self)).and_raise(error)
   end
 
   def stub_token_lookup_success

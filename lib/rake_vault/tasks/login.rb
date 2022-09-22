@@ -20,6 +20,7 @@ module RakeVault
       parameter :ensure_task_name, default: :'vault:ensure'
 
       action do |task|
+        puts 'Logging into vault...'
         if valid_token?(task.address)
           puts 'Valid token found.'
         else
@@ -44,7 +45,7 @@ module RakeVault
         puts 'Checking for valid token...'
         vault_client = Vault::Client.new(address: address)
         vault_client.auth_token.lookup_self
-      rescue Vault::HTTPClientError || Vault::HTTPServerError
+      rescue Vault::HTTPClientError, Vault::HTTPServerError
         false
       else
         true
