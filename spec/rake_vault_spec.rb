@@ -11,7 +11,8 @@ RSpec.describe RakeVault do
     context 'when instantiating RakeVault::Task::OidcAuth' do
       it 'passes the provided options and block' do
         opts = {}
-        block = ->(_t) do end
+        block = lambda do |_t|
+        end
         allow(RakeVault::Tasks::OidcAuth).to(receive(:define))
 
         described_class.define_oidc_auth_task(opts, &block)
@@ -29,7 +30,8 @@ RSpec.describe RakeVault do
     context 'when instantiating RakeVault::Task::AppRoleAuth' do
       it 'passes the provided options and block' do
         opts = {}
-        block = ->(_t) do end
+        block = lambda do |_t|
+        end
         allow(RakeVault::Tasks::AppRoleAuth).to(receive(:define))
 
         described_class.define_app_role_auth_task(opts, &block)
@@ -47,7 +49,8 @@ RSpec.describe RakeVault do
     context 'when instantiating RakeVault::Task::Login' do
       it 'passes the provided options and block' do
         opts = {}
-        block = ->(_t) do end
+        block = lambda do |_t|
+        end
         allow(RakeVault::Tasks::Login).to(receive(:define))
 
         described_class.define_login_task(opts, &block)
@@ -149,7 +152,6 @@ RSpec.describe RakeVault do
                  }))
       end
 
-      # rubocop:disable Naming/VariableNumber
       it 'uses the correct platform CPU names' do
         task_set = described_class.define_installation_tasks
 
@@ -161,7 +163,6 @@ RSpec.describe RakeVault do
                    arm64: 'arm64'
                  }))
       end
-      # rubocop:enable Naming/VariableNumber
 
       it 'uses the correct URI template' do
         task_set = described_class.define_installation_tasks

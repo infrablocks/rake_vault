@@ -20,8 +20,7 @@ describe RakeVault::TokenFile do
 
   def create_file_double(path)
     file = instance_double(File, 'file')
-    allow(File).to receive(:expand_path).and_return(path)
-    allow(File).to receive(:open).and_return(file)
+    allow(File).to receive_messages(expand_path: path, open: file)
     allow(file).to receive(:write)
     allow(file).to receive(:close)
     file
