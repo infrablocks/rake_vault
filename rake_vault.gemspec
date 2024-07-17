@@ -37,9 +37,9 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 3.1'
 
   spec.add_dependency 'colored2', '~> 3.1'
-  spec.add_dependency 'rake_dependencies', '~> 3.1'
-  spec.add_dependency 'rake_factory', '~> 0.23'
-  spec.add_dependency 'ruby_vault', '~> 0.2.0.pre.5'
+  spec.add_dependency 'rake_dependencies', '~> 3.7'
+  spec.add_dependency 'rake_factory', '~> 0.33'
+  spec.add_dependency 'ruby_vault', '~> 0.2'
   spec.add_dependency 'vault', '~> 0.17'
 
   spec.add_development_dependency 'activesupport'
