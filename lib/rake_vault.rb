@@ -14,16 +14,16 @@ module RakeVault
     command_task_set.delegate
   end
 
-  def self.define_oidc_auth_task(opts = {}, &block)
-    RakeVault::Tasks::OidcAuth.define(opts, &block)
+  def self.define_oidc_auth_task(opts = {}, &)
+    RakeVault::Tasks::OidcAuth.define(opts, &)
   end
 
-  def self.define_app_role_auth_task(opts = {}, &block)
-    RakeVault::Tasks::AppRoleAuth.define(opts, &block)
+  def self.define_app_role_auth_task(opts = {}, &)
+    RakeVault::Tasks::AppRoleAuth.define(opts, &)
   end
 
-  def self.define_login_task(opts = {}, &block)
-    RakeVault::Tasks::Login.define(opts, &block)
+  def self.define_login_task(opts = {}, &)
+    RakeVault::Tasks::Login.define(opts, &)
   end
 
   class << self

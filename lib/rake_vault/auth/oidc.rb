@@ -10,9 +10,9 @@ module RakeVault
 
         RubyVault.login(
           method: 'oidc',
-          auth: auth,
-          address: address,
-          no_print: no_print
+          auth:,
+          address:,
+          no_print:
         )
       end
     end

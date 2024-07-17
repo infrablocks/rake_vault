@@ -50,6 +50,7 @@ describe RakeVault::Tasks::Login do
 
   it 'logs in with oidc by default when not logged in' do
     define_task
+    stub_puts
     stub_logins
     stub_token_lookup_client_error
 
@@ -61,6 +62,7 @@ describe RakeVault::Tasks::Login do
 
   it 'logs in with oidc by default when not logged in with server error' do
     define_task
+    stub_puts
     stub_logins
     stub_token_lookup_server_error
 
@@ -72,7 +74,8 @@ describe RakeVault::Tasks::Login do
 
   it 'uses provided address when logging in with oidc' do
     address = 'https://some-vault.com'
-    define_task({ address: address })
+    define_task({ address: })
+    stub_puts
     stub_logins
     stub_token_lookup_client_error
 
@@ -84,7 +87,8 @@ describe RakeVault::Tasks::Login do
 
   it 'uses provided role when logging in with oidc' do
     role = 'some-role'
-    define_task({ role: role })
+    define_task({ role: })
+    stub_puts
     stub_logins
     stub_token_lookup_client_error
 
@@ -96,6 +100,7 @@ describe RakeVault::Tasks::Login do
 
   it 'sets no_print to true when logging in with oidc' do
     define_task
+    stub_puts
     stub_logins
     stub_token_lookup_client_error
 
@@ -111,6 +116,7 @@ describe RakeVault::Tasks::Login do
     ENV['VAULT_APPROLE_ROLE_ID'] = approle_role_id
     ENV['VAULT_APPROLE_SECRET_ID'] = approle_secret_id
     define_task
+    stub_puts
     stub_logins
     stub_token_lookup_client_error
 
@@ -125,7 +131,8 @@ describe RakeVault::Tasks::Login do
     address = 'https://some-vault.com'
     ENV['VAULT_APPROLE_ROLE_ID'] = 'some-role'
     ENV['VAULT_APPROLE_SECRET_ID'] = 'some-secret'
-    define_task({ address: address })
+    define_task({ address: })
+    stub_puts
     stub_logins
     stub_token_lookup_client_error
 
@@ -139,6 +146,7 @@ describe RakeVault::Tasks::Login do
     ENV['VAULT_APPROLE_ROLE_ID'] = 'some-role'
     ENV['VAULT_APPROLE_SECRET_ID'] = 'some-secret'
     define_task
+    stub_puts
     stub_logins
     stub_token_lookup_client_error
 
@@ -153,6 +161,7 @@ describe RakeVault::Tasks::Login do
     ENV['VAULT_APPROLE_ROLE_ID'] = 'some-role'
     ENV['VAULT_APPROLE_SECRET_ID'] = 'some-secret'
     define_task
+    stub_puts
     stub_logins
     stub_token_lookup_success
 
@@ -189,6 +198,11 @@ describe RakeVault::Tasks::Login do
     allow(Vault::Client).to(receive(:new)).and_return(client)
     allow(client).to(receive(:auth_token)).and_return(auth_token)
     allow(auth_token).to(receive(:lookup_self)).and_return(nil)
+  end
+
+  def stub_puts
+    allow($stdout).to(receive(:puts))
+    allow($stderr).to(receive(:puts))
   end
 end
 

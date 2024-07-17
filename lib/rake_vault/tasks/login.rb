@@ -43,7 +43,7 @@ module RakeVault
 
       def valid_token?(address)
         puts 'Checking for valid token...'
-        vault_client = Vault::Client.new(address: address)
+        vault_client = Vault::Client.new(address:)
         vault_client.auth_token.lookup_self
       rescue Vault::HTTPClientError, Vault::HTTPServerError
         false

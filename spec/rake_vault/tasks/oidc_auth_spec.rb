@@ -109,7 +109,7 @@ describe RakeVault::Tasks::OidcAuth do
 
     expect(RubyVault)
       .to(have_received(:login)
-            .with(hash_including(address: address)))
+            .with(hash_including(address:)))
   end
 
   it 'passes a no_print parameter of false to login by default' do

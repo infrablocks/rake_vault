@@ -73,7 +73,7 @@ describe RakeVault::Tasks::AppRoleAuth do
 
     expect(RubyVault)
       .to(have_received(:write)
-            .with(hash_including(path: path)))
+            .with(hash_including(path:)))
   end
 
   it 'does not pass role_id to write within data parameter ' \

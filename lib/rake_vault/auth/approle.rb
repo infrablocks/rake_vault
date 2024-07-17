@@ -19,8 +19,8 @@ module RakeVault
 
       def self.write(address, path, role_id, secret_id)
         RubyVault.write(
-          address: address,
-          path: path,
+          address:,
+          path:,
           data: [role_id, secret_id].compact,
           format: 'json'
         )
